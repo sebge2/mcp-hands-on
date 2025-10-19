@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: mcp-hands-on
+
+  ai:
+    mcp:
+      server:
+        name: sgerard-hands-on-webmvc
+        version: 1.0.0

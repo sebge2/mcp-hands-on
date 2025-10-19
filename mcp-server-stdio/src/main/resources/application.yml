@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: mcp-hands-on
+  main:
+    banner-mode: off
+
+  ai:
+    mcp:
+      server:
+        name: sgerard-hands-on-stdio
+        version: 1.0.0
+
+logging:
+  pattern:
+    console:

@@ -1,0 +1,5 @@
+### List all courses
+GET  http://localhost:8081/api/v1/chats/do-ask?question=List me all courses
+
+### Create a new course
+GET  http://localhost:8081/api/v1/chats/do-ask?question=Create a new course called 'Crossfit' and description 'Start with this sport.'
