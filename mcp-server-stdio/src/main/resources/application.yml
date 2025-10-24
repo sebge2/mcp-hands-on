@@ -9,6 +9,7 @@ spring:
       server:
         name: sgerard-hands-on-stdio
         version: 1.0.0
+        stdio: true
 
 logging:
   pattern:

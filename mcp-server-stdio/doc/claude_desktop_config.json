@@ -3,9 +3,8 @@
     "sgerard-mcp-hands-on": {
       "command": "java",
       "args": [
-        "-Dspring.ai.mcp.server.stdio=true",
         "-jar",
-        "/Users/[USER]/sandboxes/mcp-hands-on/target/mcp-hands-on-0.0.1-SNAPSHOT.jar",
+        "/Users/[USER]/sandboxes/mcp-hands-on/mcp-server-stdio/target/mcp-hands-on-0.0.1-SNAPSHOT.jar",
         "--port",
         "8080",
         "--host",
