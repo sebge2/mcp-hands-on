@@ -1,0 +1,26 @@
+### Initialize an SSE Session
+
+GET http://localhost:8080/sse?transportType=sse
+Accept: text/event-stream
+
+### Initialize State
+POST http://localhost:8080/mcp/message?sessionId=a632727e-4f2b-4f91-a1bb-3ce3569259ab
+Content-Type: application/json
+
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "initialize",
+  "params": {
+    "protocolVersion": "2024-11-05",
+    "capabilities": {
+      "tools": {},
+      "resources": {},
+      "prompts": {}
+    },
+    "clientInfo": {
+      "name": "test-client",
+      "version": "1.0.0"
+    }
+  }
+}
