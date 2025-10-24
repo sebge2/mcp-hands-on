@@ -10,6 +10,14 @@ The tool `npx @modelcontextprotocol/inspector` can be used to debug. See this [d
 
 A first call is performed on `GET http://localhost:8080/sse?transportType=sse` that returns a session id (in our example `fd4f549a-3fdb-4211-b801-3a1b8393af67`). This session id will be used in the following requests.
 
+How to extract the session id from the SSE stream:
+- With curl + sed (POSIX friendly):
+  - `SESSION_ID=$(curl -sN "http://localhost:8080/sse?transportType=sse" | sed -En 's/.*([0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){4}).*/\1/p;q') && echo $SESSION_ID`
+- With curl + awk:
+  - `SESSION_ID=$(curl -sN "http://localhost:8080/sse?transportType=sse" | awk '/[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){4}/{print $0; exit}' | grep -Eo "[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){4}") && echo $SESSION_ID`
+
+Alternatively, open the SSE URL in your browser or terminal and copy the UUID shown in the first event line, then reuse it as `sessionId` in the subsequent requests.
+
 
 ### Initialize
 

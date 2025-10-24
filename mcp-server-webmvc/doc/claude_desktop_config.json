@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "sgerard-mcp-hands-on": {
+      "command": "npx",
+      "args": ["mcp-remote", "http://localhost:8080/sse"]
+    }
+  }
+}

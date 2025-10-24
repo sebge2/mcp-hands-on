@@ -1,10 +1,27 @@
-### Initialize an SSE Session
+@sessionId=
 
+### Initialize an SSE Session
 GET http://localhost:8080/sse?transportType=sse
 Accept: text/event-stream
 
+> {%
+    var eventNumber = 0;
+    response.body.onEachLine(
+        (symbolUpdate) => {
+            if(eventNumber === 0) {
+                //const sessionId = symbolUpdate.replace('id:', '').trim();
+                client.log('The session id: ' + sessionId);
+                //client.global.set("sessionId", sessionId); TODO doesn't work
+            }
+
+            eventNumber++;
+        }
+    )
+%}
+
+
 ### Initialize State
-POST http://localhost:8080/mcp/message?sessionId=a632727e-4f2b-4f91-a1bb-3ce3569259ab
+POST http://localhost:8080/mcp/message?sessionId={{sessionId}}
 Content-Type: application/json
 
 {
@@ -22,5 +39,60 @@ Content-Type: application/json
       "name": "test-client",
       "version": "1.0.0"
     }
+  }
+}
+
+
+### Post Initialisaton
+POST http://localhost:8080/mcp/message?sessionId={{sessionId}}
+Content-Type: application/json
+
+{
+  "jsonrpc" : "2.0",
+  "method" : "notifications/initialized"
+}
+
+
+### Logging Debug
+POST http://localhost:8080/mcp/message?sessionId={{sessionId}}
+Content-Type: application/json
+
+{
+  "jsonrpc": "2.0",
+  "id": 3,
+  "method": "logging/setLevel",
+  "params": {
+    "level": "debug"
+  }
+}
+
+
+### Tools List
+POST http://localhost:8080/mcp/message?sessionId={{sessionId}}
+Content-Type: application/json
+
+{
+  "jsonrpc" : "2.0",
+  "id" : 4,
+  "method" : "tools/list",
+  "params" : {
+    "_meta" : {
+      "progressToken" : 3
+    }
+  }
+}
+
+
+### Invoke Tool
+POST http://localhost:8080/mcp/message?sessionId={{sessionId}}
+Content-Type: application/json
+
+{
+  "jsonrpc": "2.0",
+  "id": 5,
+  "method": "tools/call",
+  "params": {
+    "name": "get_all_courses",
+    "arguments": {}
   }
 }
