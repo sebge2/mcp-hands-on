@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 
 import static be.sgerard.mcp.core.utils.ResourceUtils.listFilesInResources;
 
@@ -26,26 +27,34 @@ public class CourseService {
     private final CourseRepository repository;
 
     @Tool(name = "get_all_courses", description = "Get all courses.")
-    public List<String> getCourses() {
+    public List<String> getCourseTitles() {
         return repository.findAll().stream()
                 .map(CourseEntity::getTitle)
                 .toList();
     }
 
+    public List<CourseEntity> getCourses() {
+        return repository.findAll();
+    }
+
+    public Optional<CourseEntity> findById(String id) {
+        return repository.findById(id);
+    }
+
     @Tool(name = "get_course_by_title", description = "Get a course by its title.")
-    public CourseEntity getCourseByTitle(String title) {
+    public CourseEntity findByTitle(String title) {
         return repository.findByTitleIgnoreCase(title)
                 .orElse(null);
     }
 
     @Tool(name = "create_course", description = "Create a new course.")
-    public CourseEntity createCourse(CourseEntity course) {
+    public CourseEntity create(CourseEntity course) {
         return repository.save(course);
     }
 
     @Tool(name = "update_course_description", description = "Update course description.")
     public CourseEntity updateDescription(String title, String description) {
-        final CourseEntity course = getCourseByTitle(title);
+        final CourseEntity course = findByTitle(title);
 
         course.setDescription(description);
 
@@ -53,8 +62,8 @@ public class CourseService {
     }
 
     @Tool(name = "delete_course_by_title", description = "Delete course by its title.")
-    public void deleteCourseByTitle(String title) {
-        final CourseEntity course = getCourseByTitle(title);
+    public void deleteByTitle(String title) {
+        final CourseEntity course = findByTitle(title);
 
         if (course == null) {
             return;

@@ -24,6 +24,10 @@
             <groupId>com.vladsch.flexmark</groupId>
             <artifactId>flexmark-all</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.modelcontextprotocol.sdk</groupId>
+            <artifactId>mcp</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.h2database</groupId>

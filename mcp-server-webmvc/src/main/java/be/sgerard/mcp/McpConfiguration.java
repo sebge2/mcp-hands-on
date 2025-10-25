@@ -1,8 +1,10 @@
 package be.sgerard.mcp;
 
 import be.sgerard.mcp.core.service.CourseService;
+import be.sgerard.mcp.core.service.mcp.CourseResourceMapper;
 import io.modelcontextprotocol.server.McpServerFeatures;
 import io.modelcontextprotocol.spec.McpSchema;
+import lombok.RequiredArgsConstructor;
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.ai.tool.method.MethodToolCallbackProvider;
 import org.springframework.context.annotation.Bean;
@@ -11,10 +13,14 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 
 @Configuration
+@RequiredArgsConstructor
 public class McpConfiguration {
 
+    private final CourseService service;
+    private final CourseResourceMapper resourceMapper;
+
     @Bean
-    ToolCallbackProvider courseTools(CourseService service) {
+    ToolCallbackProvider courseTools() {
         return MethodToolCallbackProvider.builder()
                 .toolObjects(service)
                 .build();
@@ -22,38 +28,9 @@ public class McpConfiguration {
 
     @Bean
     List<McpServerFeatures.SyncResourceSpecification> myResources() {
-        var systemInfoResource = new McpSchema.Resource(
-                "system://info",
-                "System Information",
-                "Provides system configuration and runtime information",
-                "text/plain",
-                null
-        );
-
-        var systemInfoSpec = new McpServerFeatures.SyncResourceSpecification(
-                systemInfoResource,
-                (exchange, request) -> {
-                    String systemInfo = """
-                System: %s
-                Java Version: %s
-                Memory: %d MB
-                """.formatted(
-                            System.getProperty("os.name"),
-                            System.getProperty("java.version"),
-                            Runtime.getRuntime().totalMemory() / (1024 * 1024)
-                    );
-
-                    return new McpSchema.ReadResourceResult(
-                            List.of(new McpSchema.TextResourceContents(
-                                    request.uri(),
-                                    "text/plain",
-                                    systemInfo
-                            ))
-                    );
-                }
-        );
-
-        return List.of(systemInfoSpec);
+        return service.getCourses().stream()
+                .map(resourceMapper::map)
+                .toList();
     }
 
     @Bean
