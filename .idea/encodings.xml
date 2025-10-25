@@ -2,6 +2,7 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/mcp-client/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/mcp-core-service/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/mcp-server-stdio/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/mcp-server-webmvc/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />

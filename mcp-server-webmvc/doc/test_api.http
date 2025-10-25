@@ -9,7 +9,7 @@ Accept: text/event-stream
     response.body.onEachLine(
         (symbolUpdate) => {
             if(eventNumber === 0) {
-                //const sessionId = symbolUpdate.replace('id:', '').trim();
+                const sessionId = symbolUpdate.replace('id:', '').trim();
                 client.log('The session id: ' + sessionId);
                 //client.global.set("sessionId", sessionId); TODO doesn't work
             }

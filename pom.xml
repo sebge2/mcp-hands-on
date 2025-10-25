@@ -19,6 +19,7 @@
 	</properties>
 
     <modules>
+        <module>mcp-core-service</module>
         <module>mcp-server-stdio</module>
         <module>mcp-server-webmvc</module>
         <module>mcp-client</module>
@@ -33,6 +34,18 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+
+            <dependency>
+                <groupId>be.sgerard</groupId>
+                <artifactId>mcp-core-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.vladsch.flexmark</groupId>
+                <artifactId>flexmark-all</artifactId>
+                <version>0.64.8</version>
+            </dependency>
 		</dependencies>
 	</dependencyManagement>
 </project>
