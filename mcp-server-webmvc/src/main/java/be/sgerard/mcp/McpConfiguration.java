@@ -1,9 +1,8 @@
 package be.sgerard.mcp;
 
 import be.sgerard.mcp.core.service.CourseService;
-import be.sgerard.mcp.core.service.mcp.CourseResourceMapper;
-import io.modelcontextprotocol.server.McpServerFeatures;
-import io.modelcontextprotocol.spec.McpSchema;
+import be.sgerard.mcp.core.service.mcp.CoursePromptProvider;
+import be.sgerard.mcp.core.service.mcp.CourseResourceProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.tool.ToolCallbackProvider;
 import org.springframework.ai.tool.method.MethodToolCallbackProvider;
@@ -12,12 +11,16 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
+import static io.modelcontextprotocol.server.McpServerFeatures.SyncPromptSpecification;
+import static io.modelcontextprotocol.server.McpServerFeatures.SyncResourceSpecification;
+
 @Configuration
 @RequiredArgsConstructor
 public class McpConfiguration {
 
     private final CourseService service;
-    private final CourseResourceMapper resourceMapper;
+    private final CourseResourceProvider resourceProvider;
+    private final CoursePromptProvider promptProvider;
 
     @Bean
     ToolCallbackProvider courseTools() {
@@ -27,27 +30,12 @@ public class McpConfiguration {
     }
 
     @Bean
-    List<McpServerFeatures.SyncResourceSpecification> myResources() {
-        return service.getCourses().stream()
-                .map(resourceMapper::map)
-                .toList();
+    List<SyncResourceSpecification> courseResources() {
+        return resourceProvider.getResources();
     }
 
     @Bean
-    List<McpServerFeatures.SyncPromptSpecification> myPrompts() {
-        var prompt = new McpSchema.Prompt("greeting", "A friendly greeting prompt",
-                List.of(new McpSchema.PromptArgument("name", "The name to greet", true)));
-
-        var promptSpecification = new McpServerFeatures.SyncPromptSpecification(prompt, (exchange, getPromptRequest) -> {
-            String nameArgument = (String) getPromptRequest.arguments().get("name");
-            if (nameArgument == null) {
-                nameArgument = "friend";
-            }
-            var userMessage = new McpSchema.PromptMessage(McpSchema.Role.USER, new McpSchema.TextContent("Hello " + nameArgument + "! How can I assist you today?"));
-            return new McpSchema.GetPromptResult("A personalized greeting message", List.of(userMessage));
-        });
-
-        return List.of(promptSpecification);
+    List<SyncPromptSpecification> coursePrompt() {
+        return List.of(promptProvider.getPrompt());
     }
-
 }

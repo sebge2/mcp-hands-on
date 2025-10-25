@@ -1,6 +1,7 @@
 package be.sgerard.mcp.core.service;
 
 import be.sgerard.mcp.core.model.CourseEntity;
+import be.sgerard.mcp.core.model.CourseMetadata;
 import be.sgerard.mcp.core.repository.CourseRepository;
 import be.sgerard.mcp.core.service.format.DocumentFormatHandler;
 import jakarta.annotation.PostConstruct;
@@ -27,14 +28,14 @@ public class CourseService {
     private final CourseRepository repository;
 
     @Tool(name = "get_all_courses", description = "Get all courses.")
-    public List<String> getCourseTitles() {
-        return repository.findAll().stream()
-                .map(CourseEntity::getTitle)
+    public List<String> findAllCourseTitles() {
+        return repository.findAllMetadata().stream()
+                .map(CourseMetadata::getTitle)
                 .toList();
     }
 
-    public List<CourseEntity> getCourses() {
-        return repository.findAll();
+    public List<CourseMetadata> findAllCourseMetadata() {
+        return repository.findAllMetadata();
     }
 
     public Optional<CourseEntity> findById(String id) {
@@ -63,12 +64,6 @@ public class CourseService {
 
     @Tool(name = "delete_course_by_title", description = "Delete course by its title.")
     public void deleteByTitle(String title) {
-        final CourseEntity course = findByTitle(title);
-
-        if (course == null) {
-            return;
-        }
-
         repository.deleteByTitleIgnoreCase(title);
     }
 
